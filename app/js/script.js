@@ -1,35 +1,25 @@
 //console.log('keypress');
-const lettersPattern = /[a-z]/; // /^[A-Za-z][A-Za-z0-9]*$/;
+const lettersPattern = /[A-Za-z]/; // /^[A-Za-z][A-Za-z0-9]*$/;
 let currentGuessCount = 1;
-let currentGuess = document.querySelector('#guess' + currentGuessCount);
-let words = ['apple', 'baker', 'store', 'horse', 'speak', 'clone', 'bread'];
-let solutionWord = '';
-
-const chooseWord = () => {
-  // choose random item from words array
-  let randomItem = Math.floor(Math.random() * (words.length - 1)) + 1;
-  solutionWord = words[randomItem];
-};
-
-chooseWord();
-//console.log('solution word = ' + solutionWord);
+let currentGuess = document.querySelector("#guess" + currentGuessCount);
+const solutionWord = "doskya";
 
 // detect keypress (letter, backspace, enter, other)
-document.addEventListener('keydown', (e) => {
+document.addEventListener("keydown", (e) => {
   //console.log('keypress: ' + e.key);
-  let keypress = e.key;
+  const keypress = e.key;
   if (currentGuessCount < 7) {
     if (
       keypress.length == 1 &&
       lettersPattern.test(e.key) &&
-      currentGuess.dataset.letters.length < 5
+      currentGuess.dataset.letters.length < 6
     ) {
       //console.log('is letter');
       updateLetters(keypress);
-    } else if (e.key == 'Backspace' && currentGuess.dataset.letters != '') {
+    } else if (e.key == "Backspace" && currentGuess.dataset.letters != "") {
       //console.log('is backspace');
       deleteFromLetters();
-    } else if (e.key == 'Enter' && currentGuess.dataset.letters.length == 5) {
+    } else if (e.key == "Enter" && currentGuess.dataset.letters.length == 6) {
       submitGuess();
     }
   }
@@ -37,7 +27,7 @@ document.addEventListener('keydown', (e) => {
 
 const submitGuess = () => {
   //console.log('submit guess');
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     setTimeout(() => {
       revealTile(i, checkLetter(i));
     }, i * 200);
@@ -45,7 +35,7 @@ const submitGuess = () => {
 };
 
 const checkIfGuessComplete = (i) => {
-  if (i == 4) {
+  if (i == 5) {
     checkWin();
   }
 };
@@ -53,28 +43,26 @@ const checkIfGuessComplete = (i) => {
 const jumpTiles = () => {
   //console.log('jumpTiles');
   //console.log(currentGuessCount);
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     setTimeout(() => {
       let currentTile = document.querySelector(
-        '#guess' + currentGuessCount + 'Tile' + (i + 1)
+        "#guess" + currentGuessCount + "Tile" + (i + 1)
       );
-      currentTile.classList.add('jump');
+      currentTile.classList.add("jump");
     }, i * 200);
   }
 };
 
 const checkWin = () => {
-  //console.log('check win');
-  if (solutionWord == currentGuess.dataset.letters) {
+  if (solutionWord == currentGuess.dataset.letters.toLowerCase()) {
     // Win
-    //console.log('game is won!');
     setTimeout(() => {
       jumpTiles();
     }, 500);
   } else {
     // Not won
     currentGuessCount = currentGuessCount + 1;
-    currentGuess = document.querySelector('#guess' + currentGuessCount);
+    currentGuess = document.querySelector("#guess" + currentGuessCount);
     //console.log('not a win, increment guess count to ' + currentGuessCount);
     if (currentGuessCount == 7) {
       setTimeout(() => {
@@ -85,7 +73,7 @@ const checkWin = () => {
 };
 
 const showSolution = () => {
-  alert('Better luck next time. The solution was: ' + solutionWord);
+  alert("Better luck next time. The solution was: " + solutionWord);
 };
 
 // Update "letters"
@@ -102,10 +90,10 @@ const updateLetters = (letter) => {
 const updateTiles = (tileNumber, letter) => {
   //console.log('updateTiles(' + tileNumber, letter + ')');
   let currentTile = document.querySelector(
-    '#guess' + currentGuessCount + 'Tile' + tileNumber
+    "#guess" + currentGuessCount + "Tile" + tileNumber
   );
   currentTile.innerText = letter;
-  currentTile.classList.add('has-letter');
+  currentTile.classList.add("has-letter");
 };
 
 // Backspace -- Delete last letter
@@ -124,10 +112,10 @@ const deleteFromTiles = (tileNumber) => {
   // remove markup from last tile
   //console.log('deleteFromTiles = ' + tileNumber);
   let currentTile = document.querySelector(
-    '#guess' + currentGuessCount + 'Tile' + tileNumber
+    "#guess" + currentGuessCount + "Tile" + tileNumber
   );
-  currentTile.innerText = '';
-  currentTile.classList.remove('has-letter');
+  currentTile.innerText = "";
+  currentTile.classList.remove("has-letter");
 };
 
 // Check letter to solution
@@ -139,12 +127,12 @@ const checkLetter = (position) => {
   //console.log(guessedLetter, solutionLetter);
 
   // If letters match, return "correct"
-  if (guessedLetter == solutionLetter) {
-    return 'correct';
+  if (guessedLetter.toLowerCase() == solutionLetter) {
+    return "correct";
   }
   // If not a match, if letter exists in solution word, return "present"
   else {
-    return checkLetterExists(guessedLetter) ? 'present' : 'absent';
+    return checkLetterExists(guessedLetter) ? "present" : "absent";
   }
 
   // If not a match, if letter doesn't exist in solution, return "absent"
@@ -163,18 +151,18 @@ const revealTile = (i, state) => {
 
 const flipTile = (tileNum, state) => {
   let tile = document.querySelector(
-    '#guess' + currentGuessCount + 'Tile' + tileNum
+    "#guess" + currentGuessCount + "Tile" + tileNum
   );
-  tile.classList.add('flip-in');
+  tile.classList.add("flip-in");
   setTimeout(() => {
     tile.classList.add(state);
   }, 250);
   setTimeout(() => {
-    tile.classList.remove('flip-in');
-    tile.classList.add('flip-out');
+    tile.classList.remove("flip-in");
+    tile.classList.add("flip-out");
   }, 250);
   setTimeout(() => {
-    tile.classList.remove('flip-out');
+    tile.classList.remove("flip-out");
   }, 1500);
 };
 /*
